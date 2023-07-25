@@ -1,5 +1,6 @@
 import json
 import requests
+from operator import itemgetter
 
 class Kanji:
     kanji_dict = dict()
@@ -28,7 +29,7 @@ class Kanji:
             for grade in grades:
                 response = requests.get(f'{url}/grade-{grade}')
                 data = json.loads(response.text)
-                Kanji.kanji_dict[str(grade)] = data
+                Kanji.kanji_dict[f'grade-{grade}'] = data
 
         get_grades()
 
@@ -46,4 +47,31 @@ class Kanji:
 
         get_jinmeiyou()
 
+        def get_jlpt_levels():
+            kanji_file = open('kanjiapi.json')
+            kanji_dict = json.load(kanji_file)['kanjis']
+            kanji_objs = kanji_dict.values()
+            by_level = itemgetter("kanji", "jlpt")
+            level_dict = dict(map(by_level, kanji_objs))
+            jlpt_level = set(level_dict.values())
+            for lvl in jlpt_level:
+                kanji_at_lvl = list(filter(lambda k:
+                    level_dict[k] == lvl, level_dict))
+                if lvl is None:
+                    Kanji.kanji_dict[f'jlpt-{0}'] = kanji_at_lvl
+                else:
+                    Kanji.kanji_dict[f'jlpt-{lvl}'] = kanji_at_lvl
+
+        get_jlpt_levels()
+
 run = Kanji()
+levels = [f'jlpt-{lvl}' for lvl in range(5)]
+grades = [f'grade-{grade}' for grade in range(1,7)]
+for i in levels:
+    print(i)
+    print(run.kanji_dict[i])
+    print(len(run.kanji_dict[i]))
+for j in grades:
+    print(j)
+    print(run.kanji_dict[j])
+    print(len(run.kanji_dict[j]))
