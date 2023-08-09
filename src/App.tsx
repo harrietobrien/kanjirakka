@@ -1,9 +1,10 @@
 import React, {MouseEvent, useRef, useEffect, useState} from 'react';
-import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 // let timersBrowserify = require("timers-browserify")
 import kanji_json from "./kanji.json";
@@ -47,10 +48,18 @@ function DisplayKanji(kanji_mode: {mode: string;}) {
   )}
 
 const modes = [
-    {name: 'All', id:'all'},
-    {name: 'Jouyou', id:'jouyou'},
-    {name: 'Jinmeiyou', id:'jinmeiyou'}
+    {name: 'All', id:'all',
+        tooltip: {title:'All Characters', msg:'13,000+ available kanji'}},
+    {name: 'Jōyō Kanji (常用漢字)', id:'jouyou',
+        tooltip: {title:'Common Kanji', msg:'"regular-use kanji"'}},
+    {name: 'Jinmeiyō Kanji (人名用漢字)', id:'jinmeiyou',
+        tooltip: {title:'Name Kanji', msg:'(registered personal names)'}},
 ];
+
+const grades = [
+    {name: '1', id: 'grade-1'},
+    {name: '2', id: 'grade-2'},
+]
 
 const ShowKanji = (kanji_mode: {mode: string;}) => {
     const {mode} = kanji_mode;
@@ -72,15 +81,34 @@ const ModeButtons = (setter: {setMode: any;} ) => {
     return (
         <ButtonGroup onClick={handleClick}>
             {modes?.map((mode, i) => (
+                <OverlayTrigger
+                    key={'top'}
+                    placement={'top'}
+                    overlay={
+                    <Tooltip id="tooltip" className="tooltip">
+                        <strong>{mode.tooltip.title}</strong>
+                        <br></br>
+                        {mode.tooltip.msg}
+                    </Tooltip>
+                    }
+                    delay={{ show: 250, hide: 0 }}
+                    trigger={["hover"]}
+                    >
                 <Button
                     key={i}
                     id={mode.id}
-                    variant="primary">
+                    variant="primary"
+                    className="btn">
                     {mode.name}
-                </Button>
+                </Button></OverlayTrigger>
             ))}
         </ButtonGroup>
     );
+}
+
+const StartButton = (props: {mode:string;}) => {
+    const {mode} = props;
+
 }
 
 function App() {
@@ -100,11 +128,14 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>KanjiRakka</p>
+        {/* <img src={logo} className="App-logo" alt="logo" /> */}
+        <p className="display-name-jp">漢字落下</p>
+        <p className="display-name-en">kanjirakka</p>
+          <br/>
         <ModeButtons
             setMode={setMode}
         />
+          <br/>
         {mode !== null ? <DisplayKanji mode={mode}/> : <p>No Mode Selected.</p>}
         {mode !== null ? <ShowKanji mode={mode}/> : <p>No Mode Selected.</p>}
       </header>

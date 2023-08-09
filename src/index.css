@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'Zen Maru Gothic', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -8,6 +8,24 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+
+/* Hiragana U+3040 --> U+309F */
+/* https://www.unicode.org/charts/PDF/U3040.pdf */
+/* Katakana U+30A0 --> U+30FF */
+/* https://www.unicode.org/charts/PDF/U30A0.pdf */
+/* Kanji --> U+4E00 – U+9FFF (CJK Unified Ideographs) */
+/* https://www.unicode.org/charts/PDF/U4E00.pdf */
+/* override for japanese unicode range */
+@font-face {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  src: url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic&display=swap');
+  /* unicode-range: U+4E00-9FFF, U+30??, U+FF00-FF9F; */
+}
+
+img {
+  width: 325px;
+  height: 100px;
 }

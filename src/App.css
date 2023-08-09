@@ -1,20 +1,46 @@
+
 .App {
   text-align: center;
+  font-family: 'Zen Maru Gothic', sans-serif;
 }
 
 .App-logo {
-  height: 40vmin;
+  height: 15vmin;
   pointer-events: none;
 }
 
+.btn {
+  background-color: #21A179 !important;
+  /* border-color --> 10% tint */
+  border-color: #37AA86 !important;
+  border: 6px;
+}
+
+.btn:hover {
+  /* background-color --> 10% shade */
+  background-color: #1E916D !important;
+}
+.tooltip {
+    /* background-color --> 60% shade */
+  --bs-tooltip-bg: #11513D !important;
+}
 /* @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
 } */
-
+.display-name-jp {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-weight: 900;
+  font-size: 60px;
+}
+.display-name-en {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-weight: 900;
+}
+/* #1E1E24 - raisin black */
 .App-header {
-  background-color: #282c34;
+  background-color: #81AE9D;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -25,7 +51,7 @@
 }
 
 .App-link {
-  color: #61dafb;
+  color: #21A179;
 }
 
 @keyframes App-logo-spin {
