@@ -1,5 +1,6 @@
-import React, {MouseEvent, useRef, useEffect, useState} from 'react';
+import React, {MouseEvent, useEffect, useState} from 'react';
 import './App.css';
+import leaf from './leaf.svg'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button';
@@ -8,6 +9,7 @@ import Tooltip from 'react-bootstrap/Tooltip';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 // let timersBrowserify = require("timers-browserify")
 import kanji_json from "./kanji.json";
+
 interface kanjiSet {
   [key: string]: string[];
 }
@@ -106,38 +108,61 @@ const ModeButtons = (setter: {setMode: any;} ) => {
     );
 }
 
-const StartButton = (props: {mode:string;}) => {
-    const {mode} = props;
+function StartGame(kanji_mode: {mode: string;}) {
 
+}
+
+/* disable start button until mode is selected */
+const StartButton = (props: {setState:any}) => {
+    const {setState} = props;
+    const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
+            console.log((e.target as Element).id)
+            setState((e.target as Element).id);
+    };
+    return (
+        <Button onClick={handleClick}
+                key={"start"}
+                id={"start"}
+                variant="primary"
+                className="btn-start">
+                Start Game
+        </Button>
+    );
 }
 
 function App() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // mode (choose mode), ready (mode chosen), game (playing game)
   const [state, setState] = useState("mode");
   const [mode, setMode] = useState<any>(null);
   useEffect(() => {
       if (mode !== null) {
           const interval = setInterval(() => {
-              setState("game");
+              setState("ready");
           }, 20000);
+          if (state === "game") {
+              StartGame(mode);
+          }
           return () => {
               clearInterval(interval);
           };
       }
-  }, [mode]);
+  }, [mode, state]);
   return (
     <div className="App">
       <header className="App-header">
-        {/* <img src={logo} className="App-logo" alt="logo" /> */}
+        <img src={leaf} className="App-logo" alt="logo" />
         <p className="display-name-jp">漢字落下</p>
         <p className="display-name-en">kanjirakka</p>
-          <br/>
+        <br/>
         <ModeButtons
             setMode={setMode}
         />
-          <br/>
+        <br/>
+        {/* testing */}
+        {mode !== null ? <StartButton setState={setState}/> : <p>Select mode to start!</p>}
         {mode !== null ? <DisplayKanji mode={mode}/> : <p>No Mode Selected.</p>}
-        {mode !== null ? <ShowKanji mode={mode}/> : <p>No Mode Selected.</p>}
+        { /* mode !== null ? <ShowKanji mode={mode}/> : <p>No Mode Selected.</p> */ }
       </header>
     </div>
   );

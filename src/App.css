@@ -5,30 +5,25 @@
 }
 
 .App-logo {
-  height: 15vmin;
+  height: 8vmin;
   pointer-events: none;
 }
-
+/* #21A179 */
 .btn {
-  background-color: #21A179 !important;
+  background-color: #00A258 !important;
   /* border-color --> 10% tint */
-  border-color: #37AA86 !important;
+  border-color: #1AAB69 !important;
   border: 6px;
 }
 
 .btn:hover {
   /* background-color --> 10% shade */
-  background-color: #1E916D !important;
+  background-color: #00924F !important;
 }
 .tooltip {
     /* background-color --> 60% shade */
-  --bs-tooltip-bg: #11513D !important;
+  --bs-tooltip-bg: #004123 !important;
 }
-/* @media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-} */
 .display-name-jp {
   font-family: 'Zen Maru Gothic', sans-serif;
   font-weight: 900;
@@ -46,19 +41,22 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  font-size: calc(12px + 2vmin);
   color: white;
 }
 
 .App-link {
   color: #21A179;
 }
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    transform-origin: 50% 0;
+    animation: App-logo-spin 3.5s ease-in-out forwards infinite;
+  }
+}
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+@keyframes App-logo-spin{
+    0%{transform: rotate(10deg);}
+    50%{transform: rotate(-5deg)}
+    100%{transform: rotate(10deg);}
 }
