@@ -1,3 +1,4 @@
+p { margin:0 }
 
 .App {
   text-align: center;
@@ -28,10 +29,12 @@
   font-family: 'Zen Maru Gothic', sans-serif;
   font-weight: 900;
   font-size: 60px;
+  margin: 10px 0 0;
 }
 .display-name-en {
   font-family: 'Zen Maru Gothic', sans-serif;
   font-weight: 900;
+  margin:0;
 }
 /* #1E1E24 - raisin black */
 .App-header {

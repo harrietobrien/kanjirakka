@@ -2,20 +2,14 @@ import React, {MouseEvent, useEffect, useState} from 'react';
 import './App.css';
 import leaf from './leaf.svg'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import Button from 'react-bootstrap/Button';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Tooltip from 'react-bootstrap/Tooltip';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-// let timersBrowserify = require("timers-browserify")
-import kanji_json from "./kanji.json";
+import Button from "react-bootstrap/Button";
+import {modes, kanji_sets, Position, url} from "./index";
+import {ModeButtons} from "./components/mode_buttons"
+import {KanjiLeaf} from "./components/kanji_leaf";
+import {Game} from "./components/game";
 
-interface kanjiSet {
-  [key: string]: string[];
-}
-const kanji_sets: kanjiSet = kanji_json;
+var TweenOne = require('rc-tween-one').default;
 
-const url = "https://kanjiapi.dev/v1/kanji";
 
 function generateIndex(mode: string) {
     console.log(mode)
@@ -25,11 +19,10 @@ function generateIndex(mode: string) {
 }
 
 function getRandomKanji(mode: string) {
-    let i  = generateIndex(mode)
-    return kanji_sets[mode][i]
+    let i  = generateIndex(mode);
+    return kanji_sets[mode][i];
 }
 
-let falling_kanji: string[] = [];
 
 function DisplayKanji(kanji_mode: {mode: string;}) {
     const {mode} = kanji_mode;
@@ -40,7 +33,9 @@ function DisplayKanji(kanji_mode: {mode: string;}) {
             .then((response) => response.json())
             .then((kanji) => {
                 setKanji(kanji);
-                falling_kanji.push(kanji)
+                let position: Position = {x: 0, y: 0}
+                let leaf = new KanjiLeaf(kanji.kanji, position, kanji);
+                falling_kanji.push(leaf)
                 console.log(kanji);
             })
             .catch((error) => console.log(error));
@@ -49,19 +44,6 @@ function DisplayKanji(kanji_mode: {mode: string;}) {
       <p>{kanji.kanji}</p>
   )}
 
-const modes = [
-    {name: 'All', id:'all',
-        tooltip: {title:'All Characters', msg:'13,000+ available kanji'}},
-    {name: 'Jōyō Kanji (常用漢字)', id:'jouyou',
-        tooltip: {title:'Common Kanji', msg:'"regular-use kanji"'}},
-    {name: 'Jinmeiyō Kanji (人名用漢字)', id:'jinmeiyou',
-        tooltip: {title:'Name Kanji', msg:'(registered personal names)'}},
-];
-
-const grades = [
-    {name: '1', id: 'grade-1'},
-    {name: '2', id: 'grade-2'},
-]
 
 const ShowKanji = (kanji_mode: {mode: string;}) => {
     const {mode} = kanji_mode;
@@ -74,42 +56,17 @@ const ShowKanji = (kanji_mode: {mode: string;}) => {
     );
 }
 
-const ModeButtons = (setter: {setMode: any;} ) => {
-    const {setMode} = setter;
-    const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
-        console.log((e.target as Element).id)
-        setMode((e.target as Element).id);
-    };
+
+let falling_kanji: KanjiLeaf[] = [];
+function StartGame (kanji_mode: {mode: string;}) {
+    const {mode} = kanji_mode;
+    new Game(mode, "playing")
+    const FallingKanji = () =>
+        <TweenOne animation={{x:0, y:0}}>
+        </TweenOne>;
     return (
-        <ButtonGroup onClick={handleClick}>
-            {modes?.map((mode, i) => (
-                <OverlayTrigger
-                    key={'top'}
-                    placement={'top'}
-                    overlay={
-                    <Tooltip id="tooltip" className="tooltip">
-                        <strong>{mode.tooltip.title}</strong>
-                        <br></br>
-                        {mode.tooltip.msg}
-                    </Tooltip>
-                    }
-                    delay={{ show: 250, hide: 0 }}
-                    trigger={["hover"]}
-                    >
-                <Button
-                    key={i}
-                    id={mode.id}
-                    variant="primary"
-                    className="btn">
-                    {mode.name}
-                </Button></OverlayTrigger>
-            ))}
-        </ButtonGroup>
+        <FallingKanji/>
     );
-}
-
-function StartGame(kanji_mode: {mode: string;}) {
-
 }
 
 /* disable start button until mode is selected */
@@ -122,7 +79,7 @@ const StartButton = (props: {setState:any}) => {
     return (
         <Button onClick={handleClick}
                 key={"start"}
-                id={"start"}
+                id={"game"}
                 variant="primary"
                 className="btn-start">
                 Start Game
@@ -140,20 +97,17 @@ function App() {
           const interval = setInterval(() => {
               setState("ready");
           }, 20000);
-          if (state === "game") {
-              StartGame(mode);
-          }
           return () => {
               clearInterval(interval);
           };
       }
-  }, [mode, state]);
+  }, [mode]);
   return (
     <div className="App">
       <header className="App-header">
         <img src={leaf} className="App-logo" alt="logo" />
         <p className="display-name-jp">漢字落下</p>
-        <p className="display-name-en">kanjirakka</p>
+          <p className="display-name-en">kanjirakka</p>
         <br/>
         <ModeButtons
             setMode={setMode}
@@ -162,7 +116,7 @@ function App() {
         {/* testing */}
         {mode !== null ? <StartButton setState={setState}/> : <p>Select mode to start!</p>}
         {mode !== null ? <DisplayKanji mode={mode}/> : <p>No Mode Selected.</p>}
-        { /* mode !== null ? <ShowKanji mode={mode}/> : <p>No Mode Selected.</p> */ }
+        {state === "game" ? <StartGame mode={mode}/> : <p>Game not started.</p> }
       </header>
     </div>
   );
