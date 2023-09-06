@@ -1,12 +1,13 @@
 import React, {MouseEvent, useEffect, useState} from 'react';
 import './App.css';
-import leaf from './leaf.svg'
+import leaf from './assets/leaf.svg'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from "react-bootstrap/Button";
 import {modes, kanji_sets, Position, url} from "./index";
 import {ModeButtons} from "./components/mode_buttons"
 import {KanjiLeaf} from "./components/kanji_leaf";
 import {Game} from "./components/game";
+import {GameScreen} from "./components/gamescreen/screen";
 
 var TweenOne = require('rc-tween-one').default;
 
@@ -116,7 +117,8 @@ function App() {
         {/* testing */}
         {mode !== null ? <StartButton setState={setState}/> : <p>Select mode to start!</p>}
         {mode !== null ? <DisplayKanji mode={mode}/> : <p>No Mode Selected.</p>}
-        {state === "game" ? <StartGame mode={mode}/> : <p>Game not started.</p> }
+        { state === "game" ? <GameScreen/> : <p>Game not started.</p> }
+        { /* state === "game" ? <StartGame mode={mode}/> : <p>Game not started.</p> */ }
       </header>
     </div>
   );

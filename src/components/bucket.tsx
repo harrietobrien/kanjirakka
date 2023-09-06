@@ -17,5 +17,13 @@ export class Bucket {
         this.bucket?.push(kanji)
     }
 
+    isCorrect(kanji: KanjiLeaf): boolean | undefined {
+        return kanji.correct;
+    }
+
+    //getCorrectLeaves(): {}
+
+    //getIncorrectLeaves(): {}
+
 }
 

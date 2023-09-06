@@ -4,11 +4,13 @@ export class KanjiLeaf {
     readonly kanji: string;
     position?: Position;
     kanjiObj?: KanjiJson;
+    correct?: boolean;
 
     constructor(kanji: string, position?: Position, kanjiObj?: KanjiJson) {
         this.kanji = kanji;
         this.position = position;
         this.kanjiObj = kanjiObj;
+        this.correct = false;
     }
 
     getKanjiJson() {
